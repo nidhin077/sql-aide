@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            .next/cache
+            .astro/cache
           # Generate a new cache whenever packages or source files change.
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
@@ -67,11 +67,13 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Clean Build
-        run: rm -rf .next && rm -rf out
+        run: rm -rf .astro && rm -rf dist   
+      - name: Build 
+        run: pnpm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./support/docs-astro/out
+          path: ./support/docs-astro/dist
 
   # Deployment job
   deploy:
